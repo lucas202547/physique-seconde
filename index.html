@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physique — Seconde · Banque de cours</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;600&display=swap');
+
+  :root {
+    --vert:        #0e7c5b;
+    --vert-clair:  #d4efe6;
+    --vert-pale:   #f0faf6;
+    --bleu:        #1a5fa8;
+    --bleu-clair:  #ddeaf9;
+    --orange:      #c8620a;
+    --orange-clair:#fdecd8;
+    --rouge:       #c0392b;
+    --violet:      #2c1a4a;
+    --gris-bg:     #f7f6f2;
+    --gris-bord:   #dddbd4;
+    --texte:       #1e1e1e;
+    --texte-2:     #4a4a4a;
+    --texte-3:     #7a7a7a;
+    --blanc:       #ffffff;
+    --serif:       'EB Garamond', Georgia, serif;
+    --sans:        'Source Sans 3', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--gris-bg);
+    color: var(--texte);
+    line-height: 1.7;
+    padding: 2rem 1rem 5rem;
+    font-size: 16px;
+  }
+
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    background: var(--blanc);
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,.07);
+    overflow: hidden;
+  }
+
+  /* ── EN-TÊTE ── */
+  .header {
+    background: var(--vert);
+    color: white;
+    padding: 2.5rem 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.05);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: 40px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.04);
+  }
+  .header .tag {
+    display: inline-block;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase;
+    background: rgba(255,255,255,.18);
+    border-radius: 20px; padding: 3px 14px;
+    margin-bottom: .9rem;
+    color: rgba(255,255,255,.9);
+  }
+  .header h1 {
+    font-family: var(--serif);
+    font-size: 2.2rem; font-weight: 600;
+    line-height: 1.15; margin-bottom: .5rem;
+    letter-spacing: .01em;
+  }
+  .header p {
+    font-size: 15px;
+    color: rgba(255,255,255,.7);
+    font-style: italic;
+  }
+
+  /* ── PROGRESSION GLOBALE ── */
+  .progression {
+    background: var(--vert-pale);
+    border-bottom: 1px solid var(--vert-clair);
+    padding: 1rem 2.5rem;
+    display: flex; align-items: center; gap: 1.2rem;
+  }
+  .prog-label { font-size: 13px; color: var(--texte-3); white-space: nowrap; }
+  .prog-bar {
+    flex: 1; height: 8px; background: var(--vert-clair);
+    border-radius: 4px; overflow: hidden;
+  }
+  .prog-inner {
+    height: 100%; background: var(--vert);
+    border-radius: 4px; transition: width .4s ease;
+  }
+  .prog-count { font-size: 13px; font-weight: 600; color: var(--vert); white-space: nowrap; }
+
+  /* ── CORPS ── */
+  .corps { padding: 1.5rem 2.5rem 2.5rem; }
+
+  /* ── THÈME ── */
+  .theme { margin-bottom: 2.5rem; }
+  .theme-titre {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 1rem;
+    padding-bottom: .6rem;
+    border-bottom: 2px solid var(--gris-bord);
+  }
+  .theme-badge {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 20px;
+    white-space: nowrap;
+  }
+  .badge-vert   { background: var(--vert-pale);   color: var(--vert); }
+  .badge-bleu   { background: var(--bleu-clair);  color: var(--bleu); }
+  .badge-orange { background: var(--orange-clair); color: var(--orange); }
+  .badge-violet { background: #f0ebff; color: var(--violet); }
+
+  .theme-titre h2 {
+    font-family: var(--serif);
+    font-size: 1.1rem; font-weight: 600;
+    color: var(--texte);
+  }
+
+  /* ── CARTE CHAPITRE ── */
+  .chapitres { display: flex; flex-direction: column; gap: 10px; }
+
+  .carte {
+    border: 1px solid var(--gris-bord);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .carte:hover { border-color: var(--vert); box-shadow: 0 2px 8px rgba(14,124,91,.1); }
+  .carte.disponible { cursor: pointer; }
+  .carte.indisponible { opacity: .55; }
+
+  .carte-inner {
+    display: flex; align-items: center; gap: 14px;
+    padding: .9rem 1.2rem;
+    text-decoration: none; color: inherit;
+  }
+  .carte-num {
+    display: flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 8px;
+    font-size: 13px; font-weight: 600;
+    flex-shrink: 0;
+  }
+  .num-vert   { background: var(--vert-pale);   color: var(--vert); }
+  .num-bleu   { background: var(--bleu-clair);  color: var(--bleu); }
+  .num-orange { background: var(--orange-clair); color: var(--orange); }
+  .num-violet { background: #f0ebff; color: var(--violet); }
+
+  .carte-contenu { flex: 1; min-width: 0; }
+  .carte-titre {
+    font-size: 14.5px; font-weight: 600;
+    color: var(--texte); margin-bottom: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .carte-competences {
+    font-size: 12px; color: var(--texte-3);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .carte-statut {
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600;
+  }
+  .statut-dispo {
+    color: var(--vert);
+    background: var(--vert-pale);
+    border: 1px solid var(--vert-clair);
+    padding: 3px 10px; border-radius: 20px;
+  }
+  .statut-non {
+    color: var(--texte-3);
+    background: var(--gris-bg);
+    border: 1px solid var(--gris-bord);
+    padding: 3px 10px; border-radius: 20px;
+  }
+  .statut-fleche { color: var(--vert); font-size: 16px; }
+
+  /* ── PIED DE PAGE ── */
+  .footer {
+    background: var(--gris-bg);
+    border-top: 1px solid var(--gris-bord);
+    padding: 1rem 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: .5rem;
+  }
+  .footer p { font-size: 12px; color: var(--texte-3); }
+  .footer a { color: var(--vert); text-decoration: none; font-size: 12px; }
+  .footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 540px) {
+    .corps { padding: 1rem 1.2rem 2rem; }
+    .header { padding: 1.8rem 1.2rem 1.5rem; }
+    .progression { padding: .8rem 1.2rem; }
+    .footer { padding: .8rem 1.2rem; }
+    .carte-competences { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="header">
+    <span class="tag">Banque de cours interactifs</span>
+    <h1>Physique — Classe de seconde</h1>
+    <p>Programme officiel · Bulletin officiel 2020</p>
+  </div>
+
+  <div class="progression">
+    <span class="prog-label">Progression :</span>
+    <div class="prog-bar"><div class="prog-inner" id="prog-inner"></div></div>
+    <span class="prog-count" id="prog-count">0 / 9 chapitres</span>
+  </div>
+
+  <div class="corps">
+
+    <!-- ══ THÈME 1 ══ -->
+    <div class="theme">
+      <div class="theme-titre">
+        <span class="theme-badge badge-bleu">Thème 1</span>
+        <h2>Constitution et transformations de la matière</h2>
+      </div>
+      <div class="chapitres">
+
+        <div class="carte indisponible">
+          <div class="carte-inner">
+            <span class="carte-num num-bleu">1.1</span>
+            <div class="carte-contenu">
+              <p class="carte-titre">Décrire la constitution et les états de la matière</p>
+              <p class="carte-competences">Atomes, molécules, ions · Corps pur et mélange · États de la matière</p>
+            </div>
+            <span class="carte-statut"><span class="statut-non">À venir</span></span>
+          </div>
+        </div>
+
+        <div class="carte indisponible">
+          <div class="carte-inner">
+            <span class="carte-num num-bleu">1.2</span>
+            <div class="carte-contenu">
+              <p class="carte-titre">Caractériser les transformations chimiques</p>
+              <p class="carte-competences">Équation de réaction · Réactifs et produits · Bilan de matière</p>
+            </div>
+            <span class="carte-statut"><span class="statut-non">À venir</span></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ THÈME 2 ══ -->
+    <div class="theme">
+      <div class="theme-titre">
+        <span class="theme-badge badge-vert">Thème 2</span>
+        <h2>Mouvement et interactions</h2>
+      </div>
+      <div class="chapitres">
+
+        <div class="carte indisponible">
+          <div class="carte-inner">
+            <span class="carte-num num-vert">2.1</span>
+            <div class="carte-contenu">
+              <p class="carte-titre">Décrire un mouvement</p>
+              <p class="carte-competences">Trajectoire · Vitesse · Mouvement rectiligne uniforme · v = d/t</p>
+            </div>
+            <span class="carte-statut"><span class="statut-non">À venir</span></span>
+          </div>
+        </div>
+
+        <div class="carte disponible">
+          <a class="carte-inner" href="https://lucas202547.github.io/physique-seconde/2-2_modeliser-action-systeme.html">
+            <span class="carte-num num-vert">2.2</span>
+            <div class="carte-contenu">
+              <p class="carte-titre">Modéliser une action sur un système</p>
+              <p class="carte-competences">Forces · Vecteurs · Loi de gravitation · Poids · Actions réciproques</p>
+            </div>
+            <span class="carte-statut">
+              <span class="statut-dispo">Disponible</span>
+              <span class="statut-fleche">→</span>
+            </span>
+          </a>
+        </div>
+
+        <div class="carte indisponible">
+          <div class="carte-inner">
+            <span class="carte-num num-vert">2.3</span>
+            <div class="carte-contenu">
+              <p class="carte-titre">Principe d'inertie</p>
+              <p class="carte-competences">1ère loi de Newton · Résultante des forces · Équilibre</p>
+            </div>
+            <span class="carte-statut"><span class="statut-non">À venir</span></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ THÈME 3 ══ -->
+    <div class="theme">
+      <div class="theme-titre">
+        <span class="theme-badge badge-orange">Thème 3</span>
+        <h2>Ondes et signaux</h2>
+      </div>
+      <div class="chapitres">
+
+        <div class="carte indisponible">
+          <div class="carte-inner">
+            <span class="carte-num num-orange">3.1</span>
+            <div class="carte-contenu">
+              <p class="carte-titre">Caractériser les ondes</p>
+              <p class="carte-competences">Onde mécanique · Célérité · Longueur d'onde · v = λf</p>
+            </div>
+            <span class="carte-statut"><span class="statut-non">À venir</span></span>
+          </div>
+        </div>
+
+        <div class="carte indisponible">
+          <div class="carte-inner">
+            <span class="carte-num num-orange">3.2</span>
+            <div class="carte-contenu">
+              <p class="carte-titre">Le son</p>
+              <p class="carte-competences">Onde longitudinale · Hauteur · Timbre · Niveau sonore</p>
+            </div>
+            <span class="carte-statut"><span class="statut-non">À venir</span></span>
+          </div>
+        </div>
+
+        <div class="carte indisponible">
+          <div class="carte-inner">
+            <span class="carte-num num-orange">3.3</span>
+            <div class="carte-contenu">
+              <p class="carte-titre">La lumière</p>
+              <p class="carte-competences">Lumière blanche · Spectre visible · Réfraction · Snell-Descartes</p>
+            </div>
+            <span class="carte-statut"><span class="statut-non">À venir</span></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ THÈME 4 ══ -->
+    <div class="theme">
+      <div class="theme-titre">
+        <span class="theme-badge badge-violet">Thème 4</span>
+        <h2>L'énergie : conversions et transferts</h2>
+      </div>
+      <div class="chapitres">
+
+        <div class="carte indisponible">
+          <div class="carte-inner">
+            <span class="carte-num num-violet">4.1</span>
+            <div class="carte-contenu">
+              <p class="carte-titre">Énergie et transferts d'énergie</p>
+              <p class="carte-competences">Énergie cinétique · Travail · Chaleur · Ec = ½mv²</p>
+            </div>
+            <span class="carte-statut"><span class="statut-non">À venir</span></span>
+          </div>
+        </div>
+
+        <div class="carte indisponible">
+          <div class="carte-inner">
+            <span class="carte-num num-violet">4.2</span>
+            <div class="carte-contenu">
+              <p class="carte-titre">Circuits électriques</p>
+              <p class="carte-competences">Loi d'Ohm · Puissance · Montages série et parallèle</p>
+            </div>
+            <span class="carte-statut"><span class="statut-non">À venir</span></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- fin .corps -->
+
+  <div class="footer">
+    <p>Programme officiel · Bulletin officiel spécial n°2 du 13 février 2020</p>
+    <a href="https://lucas202547.github.io/physique-seconde/">lucas202547.github.io/physique-seconde</a>
+  </div>
+
+</div><!-- fin .page -->
+
+<script>
+// Calcul automatique de la progression
+const total = document.querySelectorAll('.carte').length;
+const dispos = document.querySelectorAll('.carte.disponible').length;
+const pct = Math.round(dispos / total * 100);
+document.getElementById('prog-inner').style.width = pct + '%';
+document.getElementById('prog-count').textContent = dispos + ' / ' + total + ' chapitres';
+</script>
+
+</body>
+</html>
