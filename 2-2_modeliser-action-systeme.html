@@ -876,12 +876,18 @@ MathJax = {
       <div class="schema">
         <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <marker id="fl-r1" markerWidth="16" markerHeight="10" refX="15" refY="5" orient="auto">
-            <path d="M0,0 L15,5 L0,10" fill="none" stroke="#c0392b" stroke-width="1.5" stroke-linejoin="round"/>
-            </marker>
-            <marker id="fl-r2" markerWidth="16" markerHeight="10" refX="15" refY="5" orient="auto">
-            <path d="M0,0 L15,5 L0,10" fill="none" stroke="#1a5fa8" stroke-width="1.5" stroke-linejoin="round"/>
-            </marker>
+            Réduisez `markerWidth` et `markerHeight`, et ajustez `refX` :
+
+```svg
+<marker id="fl-r1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+  <path d="M0,0 L7,3 L0,6" fill="none" stroke="#c0392b" stroke-width="1.2" stroke-linejoin="round"/>
+</marker>
+<marker id="fl-r2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+  <path d="M0,0 L7,3 L0,6" fill="none" stroke="#1a5fa8" stroke-width="1.2" stroke-linejoin="round"/>
+</marker>
+```
+
+Les changements : boîte réduite à `8×6`, pointe raccourcie (`L7,3`), trait plus fin (`stroke-width="1.2"`). La pointe sera proportionnelle à l'épaisseur de la flèche.
           </defs>
 
           <!-- Sol -->
